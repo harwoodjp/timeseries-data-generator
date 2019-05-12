@@ -17,7 +17,7 @@ public class SeriesGenerator {
 	private ArrayList<HashMap<String, Object>> fSeries = new ArrayList<>();
 
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-	private enum SeriesType {NORMAL, ANOMALY}
+	private enum SeriesType { NORMAL, ANOMALY }
 
 	public SeriesGenerator(Range range, Interval interval) {
 		fRange = range;
@@ -48,8 +48,7 @@ public class SeriesGenerator {
 	}
 
 	public SeriesGenerator generateAnomaly() {
-		generateAnomalies(1);
-		return this;
+		return generateAnomalies(1);
 	}
 
 	public SeriesGenerator generateAnomalies(int count) {
@@ -57,14 +56,6 @@ public class SeriesGenerator {
 		series.put(SeriesType.ANOMALY, count);
 		fSeriesStack.push(series);
 		return this;
-	}
-
-	public Range getRange() {
-		return fRange;
-	}
-
-	public void setRange(Range range) {
-		fRange = range;
 	}
 
 	public ArrayList<HashMap<String, Object>> getSeries() {
@@ -84,9 +75,9 @@ public class SeriesGenerator {
 		HashMap<String, Object> datum = new HashMap();
 		datum.put(TIMESTAMP, dateFormat.format(new Timestamp(fCalendar.getTimeInMillis())));
 		if (series.keySet().toArray()[0] == SeriesType.NORMAL)
-			datum.put(VALUE, SeriesGeneratorUtil.getIntInRange(fRange));
+			datum.put(VALUE, fRange.getIntInRange());
 		else
-			datum.put(VALUE, SeriesGeneratorUtil.getIntOutsideRange(fRange));
+			datum.put(VALUE, fRange.getIntOutsideRange());
 		fSeries.add(datum);
 		decrementCalendar(fCalendar, fInterval);
 	}
